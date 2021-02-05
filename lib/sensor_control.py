@@ -66,6 +66,7 @@ class Sensor(PahoMqtt):
             print(str(e), 'in sensor_control.save')
 
     def reset(self):
+        self.is_started = False
         if not self.is_streaming and self.is_started:
             try:
                 os.remove(self.path)

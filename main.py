@@ -4,7 +4,7 @@ import numpy as np
 import time
 from control import Control
 from lib.sound_control import Sound
-from lib.params import BROKER, NODE, SAMPLERATE, DOWNSAMPLE, CACHE_PATH
+from lib.params import BROKER, NODE, SAMPLERATE, DOWNSAMPLE
 
 
 mic = Sound(BROKER, NODE)

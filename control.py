@@ -25,11 +25,8 @@ class Control(Tk):
             if self.clients[i].sensor_ready:
                 sen_count += 1
             else:
-                if self.sensor_ignore.get():
-                    sen_count += 1
-                else:
-                    messagebox.showwarning("Sensor Error",
-                                           f"{SENSOR_ERROR}-{i+1}")
+                messagebox.showwarning("Sensor Error",
+                                        f"{SENSOR_ERROR}-{i+1}")
         if sen_count == len(self.clients):
             self.start_btn['state'] = NORMAL
             self.reset_btn['state'] = NORMAL
@@ -40,27 +37,26 @@ class Control(Tk):
             self.start_btn['state'] = DISABLED
 
     def stream_start(self):
-        if self.label_index < 4:
-            loc = self.location[self.los_ind]
+        if self.los_ind < 1:
             label = self.label[self.label_index]
             for client in self.clients:
                 if not client.is_started:
-                    path = f'{CACHE_PATH}/{loc}'
+                    path = f'{CACHE_PATH}/{label}'
                     client.init(path)
                 client.label = label
-            msg = f'{START}-{SAVE_PATH}/{loc}/{self.index}'
+            msg = f'{START}-{SAVE_PATH}/{label}/{self.index}'
             self.sound_client.publish('sound', msg)
             msg = f'{ACTIVITIE_START}-{label}'
             self.sound_client.publish('sound', msg)
-            self.label_index += 1
+            self.los_ind += 1
         else:
-            msg = f'{SAVE}-?'
-            self.sound_client.publish('sound', msg)
             self.stream_save()
         self.update_label()
 
     def stream_reset(self):
-        self.label_index = 0
+        msg = f'{RESET}-?'
+        self.sound_client.publish('sound', msg)
+        self.los_ind = 0
         for client in self.clients:
             client.stop()
             client.reset()
@@ -78,13 +74,15 @@ class Control(Tk):
             client.start()
 
     def stream_save(self):
+        msg = f'{SAVE}-?'
+        self.sound_client.publish('sound', msg)
         self.stream_stop()
         for client in self.clients:
             client.save(self.index)
-        self.label_index = 0
-        self.los_ind += 1
-        if self.los_ind == 7:
-            self.los_ind = 0
+        self.los_ind = 0
+        self.label_index += 1
+        if self.label_index == 10:
+            self.label_index = 0
             messagebox.showinfo('Recorder', 'Done')
             self.index += 1
 
@@ -92,14 +90,14 @@ class Control(Tk):
         pass
 
     def update_label(self):
-        if self.label_index < 4 and self.los_ind < 7:
-            loc = self.location[self.los_ind]
-            lbl = self.label[self.label_index].capitalize()
-            st = f'{loc}' + f' - {lbl}'
+        if self.label_index < 10 and self.los_ind < 1:
+            lbl = self.label[self.label_index]
+            st = f'{lbl}'
             self.current_location['text'] = st
             self.start_btn['text'] = f'{lbl}'
         else:
             self.start_btn['text'] = 'SAVE'
+        self.current_index['text'] = f'Participant: {self.index}'
 
     def set_state(self):
         for index, client in enumerate(self.clients):
@@ -118,27 +116,18 @@ class Control(Tk):
         self.after(1000, self.set_state)
 
     def __init(self):
-        try:
-            os.mkdir(f'{CACHE_PATH}')
-        except FileExistsError:
-            pass
-        try:
-            os.mkdir(f'{SAVE_PATH}')
-        except FileExistsError:
-            pass
-        for item in LOCATION_LIST:
+        for item in LABEL_LIST:
             try:
-                os.mkdir(f'{CACHE_PATH}/{item}')
+                os.makedirs(f'{CACHE_PATH}/{item}')
             except FileExistsError:
                 pass
             try:
-                os.mkdir(f'{SAVE_PATH}/{item}')
+                os.makedirs(f'{SAVE_PATH}/{item}')
             except FileExistsError:
                 pass
 
         self.sound_client = PahoMqtt(BROKER, "SOUND", c_msg="sound")
         self.sound_client.loop_start()
-        self.location = LOCATION_LIST
         self.los_ind = 0
         self.label = LABEL_LIST
         self.label_index = 0
@@ -178,8 +167,7 @@ class Control(Tk):
                                    font=("default", 10, 'bold'))
         self.current_index.grid(row=0, column=0, padx=2, pady=2)
         self.current_location = Label(self.sensor_frame2,
-                                      text=f'{self.location[self.los_ind]}'
-                                      + f' - {self.label[self.label_index]}',
+                                      text=f'{self.label[self.label_index]}',
                                       background='white',
                                       font=("default", 10, 'bold'))
         self.current_location.grid(row=0, column=1, padx=2, pady=2)

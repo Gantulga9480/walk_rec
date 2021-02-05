@@ -2,7 +2,7 @@
 # BROKER = "192.168.0.100"
 BROKER = "127.0.0.1"
 PORT = 1883
-NODE = 'mic_1'
+NODE = 'mic_5'
 
 # Topic list
 SENSORS = [["sensors/sensor1/data", 1, 1],
@@ -16,8 +16,7 @@ SENSORS = [["sensors/sensor1/data", 1, 1],
            ["sensors/sensor9/data", 9, 0],
            ["sensors/sensor10/data", 10, 1]]
 
-LOCATION_LIST = ['2', '3', '4', '5', '6', '7', '8']
-LABEL_LIST = ['south', 'west', 'north', 'east']
+LABEL_LIST = ['2_1', '1_2', '2_3', '3_2', '2_5', '5_2', '4_3', '3_4', '4_5', '5_4']
 
 # Command list
 START = 'start'
@@ -29,8 +28,8 @@ QUIT = 'quit'
 ACTIVITIE_START = 'a_start'
 ACTIVITIE_STOP = 'a_stop'
 
-DEVICE = 0
-CHANNEL = 1
+DEVICE = 7
+CHANNEL = 7
 SAMPLERATE = 48000
 DOWNSAMPLE = 4
 
@@ -39,7 +38,7 @@ SOUND_BUFFER_MAX_CAPACITY = 300_000
 SENSOR_ERROR = "Sensor is not ready, check"
 
 CACHE_PATH = r'cache'
-SAVE_PATH = r'data'
+SAVE_PATH = r'data/walk'
 
 TIME_FORMAT = "%H_%M_%S"
 DATE_FORMAT = "%Y_%m_%d"
