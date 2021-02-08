@@ -66,6 +66,8 @@ class Control(Tk):
         self.reset_btn['state'] = DISABLED
 
     def stream_stop(self):
+        # msg = f'{STOP}-?'
+        # self.sound_client.publish('sound', msg)
         for client in self.clients:
             client.stop()
 
@@ -74,9 +76,9 @@ class Control(Tk):
             client.start()
 
     def stream_save(self):
+        self.stream_stop()
         msg = f'{SAVE}-?'
         self.sound_client.publish('sound', msg)
-        self.stream_stop()
         for client in self.clients:
             client.save(self.index)
         self.los_ind = 0
