@@ -12,11 +12,12 @@ SENSORS = [["sensors/sensor1/data", 1, 1],
            ["sensors/sensor5/data", 5, 1],
            ["sensors/sensor6/data", 6, 1],
            ["sensors/sensor7/data", 7, 1],
-           ["sensors/sensor8/data", 8, 0],
-           ["sensors/sensor9/data", 9, 0],
-           ["sensors/sensor10/data", 10, 1]]
+           ["sensors/sensor8/data", 10, 0],
+           ["sensors/sensor9/data", 9, 1],
+           ["sensors/sensor10/data", 8, 1]]
 
-LABEL_LIST = ['2_1', '1_2', '2_3', '3_2', '2_5', '5_2', '4_3', '3_4', '4_5', '5_4']
+LABEL_LIST = ['2_1', '1_2', '2_4', '4_2', '2_5', '5_2', '2_7',
+              '7_2', '5_4', '4_5', '5_7', '7_5', '4_7', '7_4']
 
 # Command list
 START = 'start'

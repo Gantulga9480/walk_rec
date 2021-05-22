@@ -38,6 +38,7 @@ class Control(Tk):
 
     def stream_start(self):
         if self.los_ind < 1:
+            self.reset_btn['state'] = NORMAL
             label = self.label[self.label_index]
             for client in self.clients:
                 if not client.is_started:
@@ -83,7 +84,7 @@ class Control(Tk):
             client.save(self.index)
         self.los_ind = 0
         self.label_index += 1
-        if self.label_index == 10:
+        if self.label_index == len(LABEL_LIST):
             self.label_index = 0
             messagebox.showinfo('Recorder', 'Done')
             self.index += 1
@@ -92,7 +93,7 @@ class Control(Tk):
         pass
 
     def update_label(self):
-        if self.label_index < 10 and self.los_ind < 1:
+        if self.label_index < len(LABEL_LIST) and self.los_ind < 1:
             lbl = self.label[self.label_index]
             st = f'{lbl}'
             self.current_location['text'] = st
